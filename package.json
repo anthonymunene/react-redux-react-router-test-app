@@ -76,5 +76,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/coryhouse/pluralsight-redux-starter"
+  },
+  "standard": {
+    "globals": [ "describe", "it" ]
   }
 }
