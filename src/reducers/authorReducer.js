@@ -8,8 +8,10 @@ import initialState from './initialState'
 
 export default function authorReducer (state = initialState.authors, action) {
   switch (action.type) {
+    case types.FETCH_AUTHORS:
+      return { ...state, isFetching: true }
     case types.LOAD_AUTHORS_SUCCESS:
-      return action.authors
+      return {...state, items: action.authors, isFetching: false }
     default:
       return state
   }

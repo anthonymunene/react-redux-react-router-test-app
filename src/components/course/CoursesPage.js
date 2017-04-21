@@ -1,3 +1,5 @@
+// @flow
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as courseActions from '../../actions/courseActions'
@@ -10,14 +12,24 @@ class CoursesPage extends React.Component {
     super(props, context)
     this.redirectToAddCoursePage = this.redirectToAddCoursePage.bind(this)
   }
+  shouldComponentUpdate (nextProps, nextState) {
+    return nextProps.courses !== this.props.courses
+  }
+
+  componentDidMount () {
+    // only fetch courses if store hasn't already been populated
+    if (!this.props.courses.length) {
+      this.props.actions.fetchCourses()
+    }
+  }
 
   redirectToAddCoursePage () {
     browserHistory.push('/course')
   }
   render () {
-    const {courses} = this.props
+    const { courses, isFetching } = this.props
     return (
-      <div>
+      <div style={{opacity: isFetching ? 0.5 : 1}}>
         <h1>Courses</h1>
         <input
           type='submit'
@@ -37,7 +49,8 @@ CoursesPage.propTypes = {
 }
 function mapStateToProps (state, ownProps) {
   return {
-    courses: state.courses
+    courses: state.courses.items,
+    isFetching: state.courses.isFetching
   }
 }
 function mapDispatchToProps (dispatch) {

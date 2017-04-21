@@ -1,6 +1,10 @@
 export default {
-  authors: [],
-  courses: [],
-  numAjaxCallsInProgress: 0
-
+  authors: {
+    items: [],
+    isFetching: false
+  },
+  courses: {
+    items: [],
+    isFetching: false
+  }
 }

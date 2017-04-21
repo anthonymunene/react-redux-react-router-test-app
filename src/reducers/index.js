@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux'
+import { firebaseStateReducer } from 'react-redux-firebase'
 import courses from './courseReducer'
 import authors from './authorReducer'
-import ajaxCallsInProgress from './ajaxStatusReducer'
+
 
 const rootReducer = combineReducers({
+  firebase: firebaseStateReducer,
   courses,
-  authors,
-  ajaxCallsInProgress
+  authors
 })
 
 export default rootReducer

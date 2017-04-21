@@ -2,9 +2,10 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as courseActions from '../../actions/courseActions'
+import * as authorActions from '../../actions/authorActions'
 import CourseForm from './CourseForm'
 import toastr from 'toastr'
-import authorsFormattedForDropdown from '../../selectors/selectors'
+import { authorsFormattedForDropdown } from '../../selectors/selectors'
 export class ManageCoursePage extends React.Component {
   constructor (props, context) {
     super(props, context)
@@ -18,6 +19,22 @@ export class ManageCoursePage extends React.Component {
     this.redirect = this.redirect.bind(this)
     this.courseFormIsValid = this.courseFormIsValid.bind(this)
   }
+  componentDidMount () {
+    if (!this.props.authors.length) {
+      this.props.actions.fetchAuthors()
+    }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(nextProps)
+    console.log(this.props)
+    if (
+      nextProps.course !== this.props.course
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   componentWillReceiveProps (nextProps) {
     if (this.props.course.id !== nextProps.course.id) {
       this.setState({course: Object.assign({}, nextProps.course)})
@@ -59,6 +76,7 @@ export class ManageCoursePage extends React.Component {
   }
 
   render () {
+    console.count('foo')
     return (
       <CourseForm
         allAuthors={this.props.authors}
@@ -91,20 +109,19 @@ function getCourseById (courses, id) {
 function mapStateToProps (state, ownProps) {
   const courseId = ownProps.params.id
   let course = { id: '', watchHref: '', title: '', authorId: '', length: '', category: '' }
-
-  if (courseId && state.courses.length > 0) {
-    course = getCourseById(state.courses, courseId)
+  if (courseId && state.courses.items.length > 0) {
+    course = getCourseById(state.courses.items, courseId)
   }
 
   return {
     course: course,
-    authors: authorsFormattedForDropdown(state.authors)
+    authors: authorsFormattedForDropdown(state.authors.items)
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    actions: bindActionCreators(courseActions, dispatch)
+    actions: bindActionCreators({...authorActions, ...courseActions}, dispatch)
   }
 }
 

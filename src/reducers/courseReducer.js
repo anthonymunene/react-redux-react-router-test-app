@@ -8,8 +8,10 @@ import initialState from './initialState'
 
 export default function courseReducer (state = initialState.courses, action) {
   switch (action.type) {
+    case types.FETCH_COURSES:
+      return { ...state, isFetching: true }
     case types.LOAD_COURSES_SUCCESS:
-      return action.courses
+      return { ...state, items: action.courses, isFetching: false }
     case types.CREATE_COURSE_SUCCESS:
       return [
         ...state,

@@ -1,4 +1,4 @@
-export default function authorsFormattedForDropdown (authors) {
+export const authorsFormattedForDropdown = authors => {
   return authors.map(author => {
     return {
       value: author.id,
@@ -6,3 +6,5 @@ export default function authorsFormattedForDropdown (authors) {
     }
   })
 }
+
+export const getCourses = state => state.courses
